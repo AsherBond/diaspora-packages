@@ -1,0 +1,124 @@
+#!/bin/bash
+#
+#	/etc/rc.d/init.d/diaspora
+#
+# Start/stop the diaspora daemons
+#
+# Bugs: does not support exit codes 1 and 2 (program dead w pid or
+# lockfile intact).
+#
+# chkconfig: - 80 80
+# description: Diaspora websocket daemon
+
+### BEGIN INIT INFO
+# Provides: diaspora
+# Required-Start: $local_fs $network
+# Required-Stop: $local_fs $network
+# Should-Start: $remote_fs
+# Should-Stop: $remote_fs
+# Default-Start:
+# Default-Stop: 0 1 2 3 4 5 6
+# Short-Description: start and stop Diaspora servers
+# Description: Controls the web, websockets and magent
+#              services provided and used by Diaspora.
+### END INIT INFO
+
+# Source function library.
+. /etc/init.d/functions
+
+if [ -f /etc/sysconfig/diaspora -a $UID -eq 0 ]; then
+    . /etc/sysconfig/diaspora
+fi
+
+# Note: this line is patched by installation scripts.
+cd  /usr/share/diaspora
+
+RETVAL=0
+
+[ -n "$OPTIONS" ] && OPTIONS=" $OPTIONS"
+ruby_cmd="ruby -C $PWD $exec$OPTIONS"
+
+start() {
+	[ $UID -eq 0 ] || exit 4
+	[ -f $exec ]   || exit 5
+
+        echo -n $"Starting Diaspora websocket services: "
+        for service in  magent thin websocket; do
+            echo -n " $service "
+	    initctl start diaspora-$service \
+                >> /var/log/diaspora-$service.log 2>&1 &
+            RETVAL=$((RETVAL | $? ))
+            sleep 1
+	    if test $RETVAL = 0; then
+                id=$service
+                pgrep -f "$id" > /dev/null || {
+                    echo -n "Warning: cannot find running $id service."
+                    echo_failure
+                    echo
+                    exit 7
+                }
+            fi
+            touch  /var/lock/subsys/diaspora-$service
+        done
+        echo_success
+        echo
+}
+
+stop() {
+	[ $UID -eq 0 ] || exit 4
+	echo -n $"Stopping diaspora services: "
+        for service in thin magent websocket; do
+            echo -n  "$service "
+            initctl stop diaspora-$service > /dev/null
+       	    RETVAL=$?
+	    [ $RETVAL -eq 0 ] && rm -f "${service}_lockfile"
+            rm -f /var/lock/subsys/diaspora-$service
+        done
+        if [ $RETVAL -eq 0 ]; then
+	    echo_success
+        else
+            echo_failure
+        fi
+        echo
+
+}
+
+#
+#	See how we were called.
+#
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  force-reload|restart)
+	stop
+	sleep 1
+	start
+	RETVAL=$?
+	;;
+  condrestart|try-restart)
+	if [ -f $lockfile ]; then
+	    stop
+	    sleep 3
+	    start
+	fi
+	;;
+  status)
+        for service in websocket thin magent; do
+            status=$( initctl status diaspora-$service)
+            RETVAL=$?
+            [[ "$status" == *stop* ]] && RETVAL=$((RETVAL | 1))
+            echo $status
+        done
+	;;
+  *)
+	echo $"Usage: $0 {condrestart|try-restart|start|stop|restart|force-reload|status}"
+	RETVAL=2
+	[ "$1" = 'usage' ] && RETVAL=0
+esac
+
+exit $RETVAL
+

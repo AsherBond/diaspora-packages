@@ -1,5 +1,8 @@
 # These files will be linked to %_sourcedir by 'make-dist links'
 diaspora-setup
-diaspora-wsd
+diaspora
 diaspora.logconf
 make_rel_symlink.py
+diaspora-websocket.conf
+diaspora-magent.conf
+diaspora-thin.conf

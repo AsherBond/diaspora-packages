@@ -48,6 +48,9 @@ Start development server:
     cd /usr/share/diaspora/master
     ./script/server
 
+Start production server:
+    service diaspora start
+
 See [Using Apache](http://github.com/diaspora/diaspora/wiki/Using-apache) for
 apache/passenger setup. After configuration, start with:
     /sbin/service diaspora-wsd start
@@ -55,6 +58,12 @@ apache/passenger setup. After configuration, start with:
 
 
 #### Notes
+
+Services are implemented using upstart with files /etc/init/diaspora-* To control
+separate services:
+    initctl <status|start|stop> diaspora-thin
+    initctl <status|start|stop> diaspora-websocket
+    initctl <status|start|stop> diaspora-magent
 
 prepare-rpm.sh prepare creates links  also for all files listed in SOURCES.
 Typically, this is  secondary sources listed in the spec file.

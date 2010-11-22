@@ -14,10 +14,13 @@ Group:          Applications/Communications
 URL:            http://www.joindiaspora.com/
 Vendor:         joindiaspora.com
 Source:         %{name}-%{version}-%{git_release}.tar.gz
-Source1:        diaspora-wsd
+Source1:        diaspora
 Source2:        diaspora-setup
 Source3:        diaspora.logconf
 Source4:        make_rel_symlink.py
+Source5:        diaspora-thin.conf
+Source6:        diaspora-websocket.conf
+Source7:        diaspora-magent.conf
 BuildArch:      noarch
 BuildRoot:      %{_rmpdir}/not-used-in-fedora/
 
@@ -29,16 +32,6 @@ Requires:       diaspora-bundle = %{version}
 %description
 A privacy aware, personally controlled, do-it-all and
 open source social network server.
-
-%package   wsd
-Summary:   Sys V init script for diaspora websocket daemon
-Group:     Applications/Communications
-Requires:  %{name} = %{version}
-
-%description wsd
-Tools to use the diaspora websocket daemon as a service e. g., when
-using apache passenger or system-wide installed thin server to run
-diaspora.
 
 
 %prep
@@ -60,7 +53,9 @@ cp master/pkg/fedora/README.md README-Fedora.md
 mkdir -p $RPM_BUILD_ROOT/etc/init.d
 cp %SOURCE1  $RPM_BUILD_ROOT/etc/init.d
 sed -i '/^cd /s|.*|cd %{_datadir}/diaspora/master|'  \
-       $RPM_BUILD_ROOT/etc/init.d/diaspora-wsd
+       $RPM_BUILD_ROOT/etc/init.d/diaspora
+mkdir -p $RPM_BUILD_ROOT/etc/init
+cp %SOURCE5 %SOURCE6 %SOURCE7 $RPM_BUILD_ROOT/etc/init
 
 mkdir -p  $RPM_BUILD_ROOT/%{_sysconfdir}/logrotate.d
 cp %SOURCE3  $RPM_BUILD_ROOT/%{_sysconfdir}/logrotate.d/diaspora
@@ -112,14 +107,14 @@ sed -i   -e '\|.*/master/config.ru"$|d'                    \
       files
 
 
-%post wsd
-/sbin/chkconfig --add  diaspora-wsd || :
+%post
+/sbin/chkconfig --add  diaspora || :
 
 
-%preun  wsd
+%preun
 if [ $1 -eq 0 ] ; then
-    service diaspora-wsd stop  &>/dev/null || :
-    /sbin/chkconfig --del  diaspora-wsd
+    service diaspora stop  &>/dev/null || :
+    /sbin/chkconfig --del  diaspora
 fi
 
 
@@ -148,10 +143,10 @@ rm -fr $RPM_BUILD_ROOT
 
 %config(noreplace) %{_sysconfdir}/logrotate.d/diaspora
 
-
-%files wsd
-%defattr(-, root, root, 0755)
-%{_sysconfdir}/init.d/diaspora-wsd
+%{_sysconfdir}/init.d/diaspora
+%{_sysconfdir}/init/diaspora-websocket.conf
+%{_sysconfdir}/init/diaspora-thin.conf
+%{_sysconfdir}/init/diaspora-magent.conf
 
 
 %changelog
