@@ -50,18 +50,6 @@ function build_git_gems()
     cd ..
     rm -rf d-m_m
 
-    git clone --quiet em-websocket e-w > /dev/null
-    cd e-w
-        sed  -i -e '/s\..*files/,/\]/s/\("[^"]*"\)/Dir.glob(\1)/g' \
-                -e '/s\..*files/,/\]/s/\[//g'                      \
-                -e '/s\..*files/,/\]/s/,/ + /g'                    \
-                -e '/s\..*files/,/\]/s/\]//g'                      \
-                em-websocket.gemspec
-        git commit --quiet -a -m "make-dist.sh: Fixing file paths"
-        git push --quiet origin master
-    cd ..
-    rm -rf e-w
-
     for dir in *; do
         if  [ ! -e  $dir/*.gemspec ]; then
             cp -ar $dir ../$2
