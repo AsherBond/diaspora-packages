@@ -1,0 +1,176 @@
+#! /bin/bash
+### BEGIN INIT INFO
+# Provides:          diaspora
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Controls diaspora services
+# Description:       Controls the diaspora magent, websocket and
+#                    thin services, each controlled bu upstart.
+### END INIT INFO
+
+# Author: Aledc Leamas <no-spam@email.com>
+
+# PATH should only include /usr/* if it runs after the mountnfs.sh script
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+DESC="Diaspora services"
+cd /usr/share/diaspora/master
+
+# Exit if the package is not installed
+#[ -x "$DAEMON" ] || exit 0
+
+# Read configuration variable file if it is present
+[ -r /etc/default/diaspora ] && . /etc/default/diaspora
+
+# Load the VERBOSE setting and other rcS variables
+. /lib/init/vars.sh
+
+# Define LSB log_* functions.
+# Depend on lsb-base (>= 3.0-6) to ensure that this file is present.
+. /lib/lsb/init-functions
+
+service_status()
+{
+    local retval=0
+    if local status=$( initctl status $1); then
+        echo $status | egrep -o '[0-9]{1,5}' &>/dev/null || retval=1
+    else
+        retval=2
+    fi
+    echo -n  $status
+    return $retval
+}
+
+
+do_status()
+{
+    local retval=0
+    for service in websocket thin magent; do
+         [ $service != 'websocket' ] && echo
+        service_status diaspora-$service
+        local status=$?
+        [ $status -gt  1 ] &&  return $status
+        retval=$(( retval | $status))
+    done
+    return $retval
+}
+
+#
+# Function that starts the daemon/service
+#
+do_start()
+{
+	# Return
+	#   0 if all daemons has been started
+	#   1 if any daemon was already running
+	#   2 if one daemon could not be started (other's state undefined)
+        local retval=0
+        for service in websocket thin magent; do
+            service_status diaspora-$service &> /dev/null
+            local status=$?
+            case $status in
+            1) 
+                initctl start diaspora-$service
+                [ $? -gt 0 ] && return 2
+                ;;
+            0)
+                retval=$((retval | 1))
+                ;;
+            *) 
+                return 2
+            esac 
+        done
+        #TODO: wait until thin serves it's port.
+        return $retval
+}
+
+#
+# Function that stops the daemon/service
+#
+do_stop()
+{
+	# Return
+	#   0 if daemons has been stopped
+	#   1 if any daemon was already stopped
+	#   2 if any  daemon could not be stopped
+	#   other if a failure occurred
+        local retval=0
+        for service in websocket thin magent; do
+            service_status  diaspora-$service &> /dev/null
+            local status=$?
+            case $status in
+            0)
+                initctl stop  diaspora-$service
+                [ $? -gt  0 ]  && return 2
+                ;;
+            1)
+                retval=$((retval | 1))
+                ;;
+            *)   
+                return 3
+                ;;
+            esac
+        done
+        #NOTE: we don't wait until all children done.
+	return $retval
+}
+
+#
+# Function that sends a SIGHUP to the daemon/service
+#
+
+RETVAL=0
+
+case "$1" in
+  start)
+	[ "$VERBOSE" != no ] && log_daemon_msg "Starting $DESC" "$NAME"
+	do_start
+	case "$?" in
+		0|1) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
+		2) [ "$VERBOSE" != no ] && log_end_msg 1 ;;
+	esac
+	;;
+  stop)
+	[ "$VERBOSE" != no ] && log_daemon_msg "Stopping $DESC" "$NAME"
+	do_stop
+        [ "$VERBOSE" != no ] && log_end_msg $(( RETVAL > 1 ? 1 : 0))
+	;;
+  status)
+        do_status
+        RETVAL=$?
+        [ "$VERBOSE" != no ] && log_end_msg $(( RETVAL > 1 ? 1 : 0))
+        echo
+        ;;
+  #reload|force-reload)
+	# Not implemented, fall through.
+
+  restart|force-reload)
+	#
+	# If the "reload" option is implemented then remove the
+	# 'force-reload' alias
+	#
+	log_daemon_msg "Restarting $DESC" "$NAME"
+	do_stop
+	case "$?" in
+	  0|1)
+		do_start
+		case "$?" in
+			0) log_end_msg 0 ;;
+			1) log_end_msg 1 ;; # Old process is still running
+			*) log_end_msg 1 ;; # Failed to start
+		esac
+		;;
+	  *)
+	  	# Failed to stop
+		log_end_msg 1
+		;;
+	esac
+	;;
+  *)
+	#echo "Usage: $SCRIPTNAME {start|stop|restart|reload|force-reload}" >&2
+	echo "Usage: $SCRIPTNAME {start|stop|status|restart|force-reload}" >&2
+	exit 3
+	;;
+esac
+

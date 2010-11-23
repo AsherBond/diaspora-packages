@@ -30,7 +30,10 @@ sed -i '/BUNDLE_PATH/s|:.*|: /usr/lib/diaspora-bundle/vendor/bundle|' \
 
 cp master/GNU-AGPL-3.0 master/COPYRIGHT master/README.md master/AUTHORS .
 cp master/config/app_config.yml.example ./app_config.yml
-cp master/pkg/ubuntu/diaspora-wsd.conf /etc/init
+cp master/pkg/ubuntu/diaspora-websocket.conf /etc/init
+cp master/pkg/ubuntu/diaspora-magent.conf    /etc/init
+cp master/pkg/ubuntu/diaspora-thin.conf      /etc/init
+cp master/pkg/ubuntu/diaspora                /etc/init.d
 
 
 cp master/pkg/ubuntu/diaspora.logrotate  /etc/logrotate.d/diaspora

@@ -41,10 +41,13 @@ In most cases only source will need to be built, which is fast.
 
 ### Notes
 
-The diaspora websocket service can be comtrolled through upstart.
-To start/stop:
-    % sudo service diaspora-wsd start
-    % sudo service diaspora-wsd stop
+The diaspora services are controlled by upstart. To start/stop:
+    % initctl start  <diaspora-thin|diaspora-magent|diaspora-weboscket>
+    % initctl stop  <diaspora-thin|diaspora-magent|diaspora-weboscket>
+    % initctl status  <diaspora-thin|diaspora-magent|diaspora-weboscket>
+
+To start/stop all services:
+    % sudo service diaspora <start|stop|status>
 
 ./make-dist.sh bundle|source occasionally fails on bad Gemfile.lock. The
 root cause is a bad Gemfile.lock in the git repo. Possible fixes includes
