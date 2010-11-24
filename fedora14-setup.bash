@@ -39,7 +39,7 @@ yum install  -y  \
             ImageMagick libxslt-devel  libxml2-devel sqlite-devel  \
             openssl-devel mongodb-server wget  \
             ruby-devel ruby-libs ruby-ri ruby-irb ruby-rdoc \
-            rubygems compat-readline5 git
+            rubygems compat-readline5 git java-1.6.0-openjdk
 sudo gem install bundler
 
 getent group diaspora  >/dev/null || groupadd diaspora
