@@ -6,3 +6,4 @@ make_rel_symlink.py
 diaspora-websocket.conf
 diaspora-magent.conf
 diaspora-thin.conf
+bundler-1.0.7.gem

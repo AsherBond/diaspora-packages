@@ -35,6 +35,7 @@ Group:          Applications/Communications
 URL:            http://www.joindiaspora.com/
 Vendor:         joindiaspora.com
 Source:         diaspora-bundle-%{version}-%{git_release}.tar.gz
+Source1:        bundler-1.0.7.gem
 Prefix:         %{_prefix}
 BuildRoot:      %{_tmpdir}/not-used-since-F13/
 
@@ -64,7 +65,12 @@ test -e $HOME/.rvm && {
 %setup -q -n diaspora-bundle-%{version}-%{git_release}
 
 %build
-gem install --install-dir $HOME/.rvm --bindir $HOME/bin --no-ri --no-rdoc bundler
+# Horrible hack, in wait for https://bugzilla.redhat.com/show_bug.cgi?id=646836
+# i. e., a working bundler package.
+ln -s %SOURCE1 .
+gem install --install-dir ./rvm --bindir ./bin \
+    --local --no-ri --no-rdoc bundler
+export PATH=$PWD/bin:$PATH
 export CONFIGURE_ARGS="--with-cflags='%{optflags}'"
 %if %{?_with_dev:1}0
 env GEM_HOME=$HOME/.rvm bundle install --local --deployment --without ri rdoc
