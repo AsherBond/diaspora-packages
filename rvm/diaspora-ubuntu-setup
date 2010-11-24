@@ -35,10 +35,10 @@ grep -v '^#' /etc/apt/sources.list | grep -q universe || {
 }
 
 apt-get update
-apt-get install --no-install-recommends -qy\
+apt-get install --no-install-recommends -qy \
      build-essential libxslt1-dev  libxml2  \
      rake python-software-properties git-core \
-     imagemagick libmagick9-dev  wget
+     imagemagick libmagick9-dev  wget openjdk-6-jre-headless
 
 
 # Get the current release and install mongodb
