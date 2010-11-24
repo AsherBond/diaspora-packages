@@ -100,6 +100,11 @@ echo "Installing imagemagick.."
 sudo apt-get -y --no-install-recommends install imagemagick libmagick9-dev
 echo "Installed imagemagick.."
 
+# Install java (jammit implicit requirement)
+echo "Installing java.."
+sudo apt-get -y --no-install-recommends install openjdk-6-jre-headless
+echo "Installed java.."
+
 # Install git-core
 echo "Installing git-core.."
 sudo apt-get -y --no-install-recommends install git-core
