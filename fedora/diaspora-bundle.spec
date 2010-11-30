@@ -224,8 +224,8 @@ find . -name .gitignore -delete
 find . -name \*.o -delete  || :
 find . -name MIT-LICENSE* -print | xargs chmod 644
 
-test -d vendor/bundle/ruby/1.8//gems/selenium-webdriver-0.0.* && {
-pushd  vendor/bundle//ruby/1.8/gems/selenium-webdriver-0.0.*/lib/selenium/webdriver/
+test -d vendor/bundle/ruby/1.8//gems/selenium-webdriver-0.1.* && {
+pushd  vendor/bundle//ruby/1.8/gems/selenium-webdriver-0.1.*/lib/selenium/webdriver/
 %ifarch  %ix86 x86_64
 %ifarch %ix86
    rm -rf firefox/native/linux/amd64
