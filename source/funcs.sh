@@ -109,7 +109,7 @@ function init_appconfig
     local curr_hostname=$( awk '/pod_url:/ { print $2; exit }' <$config )
 
     if [ -n "$arg_hostname" ]; then
-        sed -i "/pod_url:/s|$curr_hostname|$arg_hostname|g" $config && \
+        sed -i "/pod_url:/s|:.*|: $arg_hostname|g" $config && \
             echo "config/app_config.yml updated, pod_url is $arg_hostname."
         return 0
     else
@@ -122,7 +122,7 @@ function init_appconfig
             echo -n "Use \"$new_hostname\" as pod_url (Yes/No) [Yes]? :"
             read yesno garbage
             [ "${yesno:0:1}" = 'y' -o "${yesno:0:1}" = 'Y' -o -z "$yesno" ] && {
-                sed -i "/pod_url:/s|$hostname|$new_hostname|g" $config &&
+                sed -i "/pod_url:/s|:.*|: $new_hostname|g" $config &&
                     echo "config/app_config.yml updated."
                 break
             }
@@ -152,10 +152,9 @@ function init_public
 function init_db
 # Setup database, echo OK message but no error message.
 {
-    if bundle exec rake db:first_user; then
+    if bundle exec rake db:first_user $1; then
         cat <<- EOF
-	Database config OK. Users korth/evankorth, tom/evankorth in place
-	More details ./diaspora/db/seeds/tom.rb. and ./diaspora/db/seeds/dev.rb.
+	Database config OK, first user setup.
 	EOF
         return
     else

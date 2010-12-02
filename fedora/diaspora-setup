@@ -2,7 +2,7 @@
 #
 #  Do what's needed to initiate diaspora.
 #
-#  Usage: # ./diaspora-setup [external hostname]
+#  Usage: # ./diaspora-setup [external hostname] [password]
 #
 export PATH=$PATH:/usr/local/bin
 
@@ -43,7 +43,7 @@ test -e config/app_config.yml ||
 
 init_appconfig config/app_config.yml $arg_hostname
 
-init_db || {
+init_db ${2:-'secret'}|| {
     cat <<- EOF
 	Database config failed. You might want to
 	  - Just remove the db lock file: rm /var/lib/mongodb/mongod.lock
