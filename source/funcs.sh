@@ -152,7 +152,7 @@ function init_public
 function init_db
 # Setup database, echo OK message but no error message.
 {
-    if bundle exec rake db:seed:dev; then
+    if bundle exec rake db:first_user; then
         cat <<- EOF
 	Database config OK. Users korth/evankorth, tom/evankorth in place
 	More details ./diaspora/db/seeds/tom.rb. and ./diaspora/db/seeds/dev.rb.

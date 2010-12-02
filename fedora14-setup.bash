@@ -75,7 +75,7 @@ init_appconfig config/app_config.yml "$DIASPORA_HOSTNAME"
 mv lib/tasks/jasmine.rake lib/tasks/jasmine.no-rake
 
 echo "Setting up DB..."
-if  bundle exec rake db:seed:dev ; then
+if  bundle exec rake db:first_user ; then
     cat <<- EOM
 	DB ready. Logins -> tom and korth, password -> evankorth.
 	More details ./diaspora/db/seeds/tom.rb. and ./diaspora/db/seeds/dev.rb.

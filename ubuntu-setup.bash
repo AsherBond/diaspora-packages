@@ -193,7 +193,7 @@ fi
 
 # Install DB setup
 echo "Setting up DB..."
-if  rake db:seed:dev ; then
+if  rake db:first_user ; then
     cat <<- EOF
 	DB ready. Logins -> tom or korth,  password -> evankorth.
 	More details ./diaspora/db/seeds/tom.rb. and ./diaspora/db/seeds/dev.rb.
