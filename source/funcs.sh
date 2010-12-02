@@ -152,10 +152,9 @@ function init_public
 function init_db
 # Setup database, echo OK message but no error message.
 {
-    if bundle exec rake db:first_user $1; then
-        cat <<- EOF
-	Database config OK, first user setup.
-	EOF
+    [ -n "$1" ] && pw_arg="password=$1"
+    if bundle exec rake db:first_user $pw_arg; then
+        echo "Database config OK, first user setup."
         return
     else
         return  1

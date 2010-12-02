@@ -38,7 +38,7 @@ cp master/pkg/ubuntu/diaspora                /etc/init.d
 
 cp master/pkg/ubuntu/diaspora.logrotate  /etc/logrotate.d/diaspora
 
-cp master/pkg/ubuntu/diaspora-setup .
+ln -s  master/pkg/ubuntu/diaspora-setup .
 
 mkdir -p /var/log/diaspora
 mkdir -p /var/lib/diaspora/uploads
