@@ -110,6 +110,9 @@ echo "Installing git-core.."
 sudo apt-get -y --no-install-recommends install git-core
 echo "Installed git-core.."
 
+# Instal libssl-dev (rumour dependency)
+sudo apt-get -y --no-install-recommends install libssl-dev
+
 # Setting up ruby gems
 echo "Fetching and installing ruby gems.."
 (

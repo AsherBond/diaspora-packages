@@ -15,9 +15,19 @@ release=$( lsb_release -a | awk '/Release:/ {print $2}')
 
 sudo apt-get update
 sudo apt-get install --no-install-recommends -qy \
-     build-essential libxslt1-dev  libxml2  openjdk-6-jre-headless \
-     ruby-full mongodb rake python-software-properties git-core \
-     imagemagick libmagick9-dev
+    build-essential            \
+    git-core                   \
+    imagemagick                \
+    libmagick9-dev             \
+    libssl_dev                 \
+    libxml2                    \
+    libxslt1-dev               \
+    mongodb                    \
+    openjdk-6-jre-headless     \
+    python-software-properties \
+    rake                       \
+    ruby-full
+
 if [ "$release" = "10.04" ]; then
     # See: https://bugs.launchpad.net/ubuntu/+source/mongodb/+bug/557024
     sudo apt-get install xulrunner-1.9
