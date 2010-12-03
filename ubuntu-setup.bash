@@ -20,6 +20,7 @@
 GIT_REPO=${GIT_REPO:-'http://github.com/leamas/diaspora.git'}
 
 arg_hostname="$1"
+[ -n "$2" ] && arg_pw="password=$2"
 
 # Set extented globbing
 shopt -s extglob
@@ -196,7 +197,7 @@ fi
 
 # Install DB setup
 echo "Setting up DB..."
-if  rake db:first_user ; then
+if  rake db:first_user $arg_pw; then
     cat <<- EOF
 	DB ready. Logins -> tom or korth,  password -> evankorth.
 	More details ./diaspora/db/seeds/tom.rb. and ./diaspora/db/seeds/dev.rb.
