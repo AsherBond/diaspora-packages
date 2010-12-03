@@ -53,7 +53,7 @@ echo "..Done installing build tools"
 
 # Install Ruby 1.8.7
 echo "Installing ruby-full Ruby 1.8.7.."
-sudo apt-get -y --no-install-recommends install ruby-full
+sudo apt-get -y --no-install-recommends install ruby-full ruby-dev
 echo "..Done installing Ruby"
 
 # Install Rake
