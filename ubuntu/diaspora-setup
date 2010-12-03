@@ -2,11 +2,12 @@
 #
 #  Do what's needed to initiate diaspora.
 #
-#  Usage: sudo diaspora-setup [external hostname]
+#  Usage: sudo diaspora-setup [external hostname] [first user pw]
 #
 export PATH=$PATH:/usr/local/bin
 
 arg_hostname="$1"
+arg_pw=${2:-'nosecret'}
 
 path=$( readlink -fn $0) && cd $(dirname $path)/../.. || \
     cd /usr/share/diaspora/master
@@ -45,7 +46,7 @@ test -e config/app_config.yml ||
 [ -e  lib/tasks/jasmine.rake ] &&
     sudo mv lib/tasks/jasmine.rake lib/tasks/jasmine.no-rake
 
-init_appconfig config/app_config.yml $arg_hostname
+init_appconfig config/app_config.yml $arg_hostname $arg_pw
 
 init_db || {
     cat <<- EOF
