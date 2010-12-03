@@ -46,15 +46,14 @@ test -e config/app_config.yml ||
 [ -e  lib/tasks/jasmine.rake ] &&
     sudo mv lib/tasks/jasmine.rake lib/tasks/jasmine.no-rake
 
-init_appconfig config/app_config.yml $arg_hostname $arg_pw
+init_appconfig config/app_config.yml $arg_hostname
 
-init_db || {
+init_db $arg_pw|| {
     cat <<- EOF
 	Database config failed. You might want to
 	 - Just remove the db lock file: rm /var/lib/mongodb/mongod.lock
 	 - Drop the diaspora mongo database:
-	         % mongo diaspora-development
-	         > db.dropDatabase()
+	         % bundle exec rake db:purge
 	 - Remove all db files: rm -rf /var/lib/mongodb/*
 	 - Reset the config file by
 	       cp config/app_config.yml.example config/app_config.yml
