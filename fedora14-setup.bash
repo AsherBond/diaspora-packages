@@ -28,19 +28,30 @@ test $UID = "0" || {
     exit 2
 }
 
-[[ -d config && -d script ]] || {
-    echo Error: "this is not a diaspora base directory"
-    exit 3
-}
+echo "Installing diaspora from $GIT_REPO"
 
 sudo yum groupinstall -y "Development tools"
 
 yum install  -y  \
-            readline-devel  zlib-devel libyaml-devel libffi-devel \
-            ImageMagick libxslt-devel  libxml2-devel sqlite-devel  \
-            openssl-devel mongodb-server wget  \
-            ruby-devel ruby-libs ruby-ri ruby-irb ruby-rdoc \
-            rubygems compat-readline5 git java-1.6.0-openjdk
+    compat-readline5         \
+    git java-1.6.0-openjdk   \
+    ImageMagick              \
+    libffi-devel             \
+    libxml2-devel            \
+    libxslt-devel            \
+    libyaml-devel            \
+    mongodb-server wget      \
+    openssl-devel            \
+    readline-devel           \
+    ruby-devel               \
+    ruby-irb                 \
+    ruby-libs                \
+    ruby-rdoc                \
+    ruby-ri                  \
+    rubygems                 \
+    sqlite-devel             \
+    zlib-devel
+
 sudo gem install bundler
 
 getent group diaspora  >/dev/null || groupadd diaspora
@@ -48,7 +59,6 @@ getent passwd diaspora  >/dev/null || {
     useradd -g diaspora -s /bin/bash -m diaspora
     echo "Created user diaspora"
 }
-
 
 service mongod start
 
