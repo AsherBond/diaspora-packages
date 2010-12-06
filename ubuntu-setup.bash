@@ -200,20 +200,15 @@ fi
 
 # Install DB setup
 echo "Setting up DB..."
-if  rake db:first_user $arg_pw; then
+rake db:first_user $arg_pw || {
     cat <<- EOF
-	DB ready. Logins -> tom or korth,  password -> evankorth.
-	More details ./diaspora/db/seeds/tom.rb. and ./diaspora/db/seeds/dev.rb.
-	EOF
-else
-        cat <<- EOF
 	Database config failed. You might want to remove all db files with
 	'rm -rf /var/lib/mongodb/*' and/or reset the config file by
 	'cp config/app_config.yml.example config/app_config.yml' before
 	making a new try. Also, make sure the mongodb server is running
 	EOF
-fi
+}
 
 echo 'To start server: sudo su - diaspora -c "diaspora/script/server -d"'
-echo " To stop server: pkill thin; kill \$(cat $pidfile)"
+echo "To stop server: pkill thin; kill \$(cat $pidfile)"
 

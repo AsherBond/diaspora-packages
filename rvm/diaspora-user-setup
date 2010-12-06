@@ -19,7 +19,7 @@
 GIT_REPO=${GIT_REPO:-'http://github.com/diaspora/diaspora.git'}
 PKG_REPO=${PKG_REPO:-'http://github.com/diaspora/diaspora-packages.git'}
 DIASPORA_HOSTNAME=${1:-$(hostname)}
-PASSWORD=${2:-'nosecret'}
+[ -n "$2" ] && ARG_PW="password=$2"
 
 test $UID = "0" && {
     echo "You must not be root doing  this, giving up"
@@ -78,7 +78,7 @@ cp config/app_config.yml.example config/app_config.yml
 source pkg/source/funcs.sh
 init_appconfig config/app_config.yml "$DIASPORA_HOSTNAME"
 
-init_db password=$PASSWORD || {
+init_db $ARG_PW || {
     cat <<- EOM
 	Database config failed. You might want to remove all db files
 	and/or reset the config file by
