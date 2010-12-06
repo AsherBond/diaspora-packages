@@ -114,6 +114,9 @@ echo "Installed git-core.."
 # Instal libssl-dev (rumour dependency)
 sudo apt-get -y --no-install-recommends install libssl-dev
 
+echo "Installing redis server"
+sudo apt-get -y --no-install-recommends install redis-server
+
 # Setting up ruby gems
 echo "Fetching and installing ruby gems.."
 (

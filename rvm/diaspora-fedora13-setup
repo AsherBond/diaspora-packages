@@ -19,10 +19,23 @@ test $UID = "0" || {
 
 yum groupinstall -y "Development tools"
 
-yum install  -y git sqlite-devel readline-devel  zlib-devel        \
-            libyaml-devel libffi-devel  ImageMagick libxslt-devel  \
-            libxml2-devel openssl-devel mongodb-server wget curl  \
-            iconv-devel java-1.6.0-openjdk
+yum install  -y \
+    curl                \
+    git                 \
+    iconv-devel         \
+    ImageMagick         \
+    java-1.6.0-openjdk  \
+    libffi-devel        \
+    libxml2-devel       \
+    libxslt-devel       \
+    libyaml-devel       \
+    mongodb-server      \
+    openssl-devel       \
+    readline-devel      \
+    redis               \
+    sqlite-devel        \
+    wget                \
+    zlib-devel
 
 chkconfig mongod on
 service mongod start

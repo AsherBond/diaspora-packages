@@ -43,6 +43,7 @@ yum install  -y  \
     mongodb-server wget      \
     openssl-devel            \
     readline-devel           \
+    redis                    \
     ruby-devel               \
     ruby-irb                 \
     ruby-libs                \

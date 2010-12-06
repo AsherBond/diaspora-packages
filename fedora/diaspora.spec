@@ -25,6 +25,7 @@ BuildArch:      noarch
 BuildRoot:      %{_rmpdir}/not-used-in-fedora/
 
 Requires:       mongodb-server
+Requires:       redis
 Requires:       ruby(abi) = 1.8
 Requires:       diaspora-bundle = %{version}
 

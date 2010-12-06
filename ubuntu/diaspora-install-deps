@@ -26,6 +26,7 @@ sudo apt-get install --no-install-recommends -qy \
     openjdk-6-jre-headless     \
     python-software-properties \
     rake                       \
+    redis-server               \
     ruby-full
 
 # bug in 10.10 prevents ruby-dev to be installed with the others (!)

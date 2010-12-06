@@ -45,6 +45,7 @@ apt-get install --no-install-recommends -qy \
      libxml2                    \
      openjdk-6-jre-headless     \
      python-software-properties \
+     redis                      \
      rake                       \
      wget
 
