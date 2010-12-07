@@ -42,8 +42,8 @@ start() {
 	[ $UID -eq 0 ] || exit 4
 	[ -f $exec ]   || exit 5
 
-        echo -n $"Starting Diaspora websocket services: "
-        for service in  magent thin websocket; do
+        echo -n $"Starting Diaspora services: "
+        for service in  magent redis resque thin websocket; do
             echo -n " $service "
 	    initctl start diaspora-$service \
                 >> /var/log/diaspora-$service.log 2>&1 &
@@ -51,8 +51,8 @@ start() {
             sleep 1
 	    if test $RETVAL = 0; then
                 id=$service
-                pgrep -f "$id" > /dev/null || {
-                    echo -n "Warning: cannot find running $id service."
+                ps -fu diaspora | grep  -q "$id"  || {
+                    echo  "Warning: cannot find running $id service."
                     echo_failure
                     echo
                     exit 7
@@ -60,6 +60,7 @@ start() {
             fi
             touch  /var/lock/subsys/diaspora-$service
         done
+        echo
         echo_success
         echo
 }
@@ -67,13 +68,15 @@ start() {
 stop() {
 	[ $UID -eq 0 ] || exit 4
 	echo -n $"Stopping diaspora services: "
-        for service in thin magent websocket; do
+        for service in thin redis magent resque websocket; do
             echo -n  "$service "
             initctl stop diaspora-$service > /dev/null
        	    RETVAL=$?
 	    [ $RETVAL -eq 0 ] && rm -f "${service}_lockfile"
             rm -f /var/lock/subsys/diaspora-$service
+            sleep 1
         done
+        echo
         if [ $RETVAL -eq 0 ]; then
 	    echo_success
         else
@@ -107,7 +110,7 @@ case "$1" in
 	fi
 	;;
   status)
-        for service in websocket thin magent; do
+        for service in websocket redis resque thin magent; do
             status=$( initctl status diaspora-$service)
             RETVAL=$?
             [[ "$status" == *stop* ]] && RETVAL=$((RETVAL | 1))
