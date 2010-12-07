@@ -43,7 +43,7 @@ test -e config/app_config.yml ||
 
 init_appconfig config/app_config.yml $arg_hostname
 
-init_db ${2:-'secret'}|| {
+init_db "$2" || {
     cat <<- EOF
 	Database config failed. You might want to
 	  - Just remove the db lock file: rm /var/lib/mongodb/mongod.lock
