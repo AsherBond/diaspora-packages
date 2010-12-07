@@ -61,6 +61,3 @@ init_db ${2:-'secret'}|| {
 init_public
 
 chown -R diaspora /var/log/diaspora
-
-sed -i '/socket_pidfile:/s|:.*|: /var/run/diaspora/diaspora-wsd.pid|' \
-    config/app_config.yml

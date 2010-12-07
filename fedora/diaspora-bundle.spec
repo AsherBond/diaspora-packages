@@ -219,8 +219,8 @@ exit 0
 %install
 [ "$RPM_BUILD_ROOT" != "/" ] && rm -fr $RPM_BUILD_ROOT
 
-find . -name .git | xargs rm -rf
-find . -name .gitignore -delete
+#find . -name .git | xargs rm -rf
+#find . -name .gitignore -delete
 find . -name \*.o -delete  || :
 find . -name MIT-LICENSE* -print | xargs chmod 644
 
