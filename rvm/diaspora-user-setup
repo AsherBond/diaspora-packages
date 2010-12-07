@@ -19,7 +19,7 @@
 GIT_REPO=${GIT_REPO:-'http://github.com/diaspora/diaspora.git'}
 PKG_REPO=${PKG_REPO:-'http://github.com/diaspora/diaspora-packages.git'}
 DIASPORA_HOSTNAME=${1:-$(hostname)}
-[ -n "$2" ] && ARG_PW="password=$2"
+ARG_PW="$2"
 
 test $UID = "0" && {
     echo "You must not be root doing  this, giving up"
