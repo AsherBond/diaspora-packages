@@ -23,6 +23,17 @@ GIT_REPO=${GIT_REPO:-'http://github.com/diaspora/diaspora.git'}
 DIASPORA_HOSTNAME=${1:-$(hostname)}
 [ -n "$2" ] && ARG_PW="password=$2"
 
+function mongodb_config
+#Ensure that mongodb only serves localhost (security).
+{
+    grep 'bind_ip' $1 || {
+        echo "Reconfiguring mongod to only serve localhost (127.0.0.1)"
+        echo >> $1
+        echo "bind_ip = 127.0.0.1   # Added by diaspora-setup" >> $1
+    }
+}
+
+
 test $UID = "0" || {
     echo "You need to be root to do this, giving up"
     exit 2
@@ -61,6 +72,7 @@ getent passwd diaspora  >/dev/null || {
     echo "Created user diaspora"
 }
 
+mongodb_config /etc/mongodb.conf
 service mongod start
 
 su - diaspora << EOF

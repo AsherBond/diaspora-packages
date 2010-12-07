@@ -43,6 +43,8 @@ test -e config/app_config.yml ||
 
 init_appconfig config/app_config.yml $arg_hostname
 
+mongodb_config /etc/mongodb.conf
+
 init_db "$2" || {
     cat <<- EOF
 	Database config failed. You might want to
