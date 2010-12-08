@@ -19,8 +19,7 @@
 # Default-Start:
 # Default-Stop: 0 1 2 3 4 5 6
 # Short-Description: start and stop Diaspora servers
-# Description: Controls the web, websockets and magent
-#              services provided and used by Diaspora.
+# Description: Controls the Diaspora services.
 ### END INIT INFO
 
 # Source function library.
@@ -43,7 +42,7 @@ start() {
 	[ -f $exec ]   || exit 5
 
         echo -n $"Starting Diaspora services: "
-        for service in  magent redis resque thin websocket; do
+        for service in  redis resque thin websocket; do
             echo -n " $service "
 	    initctl start diaspora-$service \
                 >> /var/log/diaspora-$service.log 2>&1 &
@@ -68,7 +67,7 @@ start() {
 stop() {
 	[ $UID -eq 0 ] || exit 4
 	echo -n $"Stopping diaspora services: "
-        for service in thin redis magent resque websocket; do
+        for service in thin redis  resque websocket; do
             echo -n  "$service "
             initctl stop diaspora-$service > /dev/null
        	    RETVAL=$?
@@ -110,7 +109,7 @@ case "$1" in
 	fi
 	;;
   status)
-        for service in websocket redis resque thin magent; do
+        for service in websocket redis resque thin ; do
             status=$( initctl status diaspora-$service)
             RETVAL=$?
             [[ "$status" == *stop* ]] && RETVAL=$((RETVAL | 1))

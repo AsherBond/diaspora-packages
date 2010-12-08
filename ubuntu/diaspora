@@ -45,7 +45,7 @@ do_status()
 # 1 => at least one stopped, > 1 => errors.
 {
     local retval=0
-    for service in websocket thin magent redis resque; do
+    for service in websocket thin redis resque; do
          [ $service != 'websocket' ] && echo
         service_status diaspora-$service
         local status=$?
@@ -65,7 +65,7 @@ do_start()
 	#   1 if any daemon was already running
 	#   2 if one daemon could not be started (other's state undefined)
         local retval=0
-        for service in websocket thin magent redis resque; do
+        for service in websocket thin redis resque; do
             service_status diaspora-$service &> /dev/null
             local status=$?
             case $status in
@@ -95,7 +95,7 @@ do_stop()
 	#   2 if any  daemon could not be stopped
 	#   other if a failure occurred
         local retval=0
-        for service in websocket thin magent resque redis; do
+        for service in websocket thin resque redis; do
             service_status  diaspora-$service &> /dev/null
             local status=$?
             case $status in

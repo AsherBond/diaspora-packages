@@ -20,7 +20,8 @@ Source3:        diaspora.logconf
 Source4:        make_rel_symlink.py
 Source5:        diaspora-thin.conf
 Source6:        diaspora-websocket.conf
-Source7:        diaspora-magent.conf
+Source7:        diaspora-redis.conf
+Source8:        diaspora-resque.conf
 BuildArch:      noarch
 BuildRoot:      %{_rmpdir}/not-used-in-fedora/
 
@@ -56,7 +57,7 @@ cp %SOURCE1  $RPM_BUILD_ROOT/etc/init.d
 sed -i '/^cd /s|.*|cd %{_datadir}/diaspora/master|'  \
        $RPM_BUILD_ROOT/etc/init.d/diaspora
 mkdir -p $RPM_BUILD_ROOT/etc/init
-cp %SOURCE5 %SOURCE6 %SOURCE7 $RPM_BUILD_ROOT/etc/init
+cp %SOURCE5 %SOURCE6 %SOURCE7 %SOURCE8 $RPM_BUILD_ROOT/etc/init
 
 mkdir -p  $RPM_BUILD_ROOT/%{_sysconfdir}/logrotate.d
 cp %SOURCE3  $RPM_BUILD_ROOT/%{_sysconfdir}/logrotate.d/diaspora
@@ -147,7 +148,8 @@ rm -fr $RPM_BUILD_ROOT
 %{_sysconfdir}/init.d/diaspora
 %{_sysconfdir}/init/diaspora-websocket.conf
 %{_sysconfdir}/init/diaspora-thin.conf
-%{_sysconfdir}/init/diaspora-magent.conf
+%{_sysconfdir}/init/diaspora-redis.conf
+%{_sysconfdir}/init/diaspora-resque.conf
 
 
 %changelog

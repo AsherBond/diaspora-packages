@@ -63,7 +63,6 @@ Services are implemented using upstart with files /etc/init/diaspora-* To contro
 separate services:
     initctl <status|start|stop> diaspora-thin
     initctl <status|start|stop> diaspora-websocket
-    initctl <status|start|stop> diaspora-magent
     initctl <status|start|stop> diaspora-redis
     initctl <status|start|stop> diaspora-resque
 

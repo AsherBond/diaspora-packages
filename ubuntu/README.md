@@ -42,9 +42,10 @@ In most cases only source will need to be built, which is fast.
 ### Notes
 
 The diaspora services are controlled by upstart. To start/stop:
-    % initctl start  <diaspora-thin|diaspora-magent|diaspora-weboscket>
-    % initctl stop  <diaspora-thin|diaspora-magent|diaspora-weboscket>
-    % initctl status  <diaspora-thin|diaspora-magent|diaspora-weboscket>
+    % sudo initctl <start|stop|status>  diaspora-thin
+    % sudo initctl <start|stop|status>  diaspora-redis
+    % sudo initctl <start|stop|status>  diaspora-websocket
+    % sudo initctl <start|stop|status>  diaspora-resque
 
 To start/stop all services:
     % sudo service diaspora <start|stop|status>
