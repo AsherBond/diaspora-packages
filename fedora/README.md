@@ -64,6 +64,13 @@ separate services:
     initctl <status|start|stop> diaspora-thin
     initctl <status|start|stop> diaspora-websocket
     initctl <status|start|stop> diaspora-magent
+    initctl <status|start|stop> diaspora-redis
+    initctl <status|start|stop> diaspora-resque
+
+All services are controlled by the SysV /etc/init.d/diaspora script. To
+start/stop all services:
+    service diaspora start
+    service diaspora stop
 
 prepare-rpm.sh prepare creates links  also for all files listed in SOURCES.
 Typically, this is  secondary sources listed in the spec file.

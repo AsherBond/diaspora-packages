@@ -171,3 +171,33 @@ function mongodb_config
     }
 }
 
+function redis_config
+# Create/update the local redis.conf file from /etc master
+{
+    if [ -r "/etc/redis.conf" ]; then
+        redis_conf="/etc/redis.conf"
+    elif [ -r "/etc/redis/redis.conf" ]; then
+        redis_conf="/etc/redis/redis.conf"
+    else
+        echo <<- EOM
+                Don't know how to configure redis for this platform. Copy
+                the configuration file redis.conf to the config directory
+                and patch it manually. In particular, don't daemonize.
+        EOM
+        return
+    fi
+
+    if [ config/redis.cont -nt $redis_conf ]
+    then
+        return
+    fi
+
+    cp $redis_conf config/redis.conf
+    sed -i -e '/^[^#]*daemonize/s/yes/no/'                              \
+           -e '/^[^#]*logfile/s|.*|logfile /var/log/diaspora/redis.log|' \
+        config/redis.conf
+
+
+}
+
+

@@ -46,6 +46,8 @@ test -e config/app_config.yml ||
 [ -e  lib/tasks/jasmine.rake ] &&
     sudo mv lib/tasks/jasmine.rake lib/tasks/jasmine.no-rake
 
+redis_config
+
 init_appconfig config/app_config.yml $arg_hostname
 
 init_db $arg_pw|| {

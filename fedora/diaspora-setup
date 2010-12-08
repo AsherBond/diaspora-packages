@@ -26,7 +26,6 @@ test -n "$services" && {
 
 /sbin/service mongod start || :
 
-
 libdir=$(rpm --eval %_libdir)
 
 rm -rf vendor
@@ -40,6 +39,8 @@ test -e config/app_config.yml ||
 
 [ -e  lib/tasks/jasmine.rake ] &&
     sudo mv lib/tasks/jasmine.rake lib/tasks/jasmine.no-rake
+
+redis_config
 
 init_appconfig config/app_config.yml $arg_hostname
 
