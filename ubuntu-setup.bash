@@ -172,7 +172,8 @@ bundle install || {
 }
 #    bundle exec jasmine init
 [ -e lib/tasks/jasmine.rake ] && \
-    mv lib/tasks/jasmine.rake lib/tasks/jasmine.no-rake
+    mv lib/tasks/jasmine.rake lib/tasks/jasmine.no-rake &&
+        touch lib/tasks/jasmine.rake
 echo "Installed."
 
 #Configure diaspora

@@ -96,7 +96,11 @@ bundle install --path vendor/bundle
 cp config/app_config.yml.example config/app_config.yml
 source pkg/source/funcs.sh
 init_appconfig config/app_config.yml "$DIASPORA_HOSTNAME"
-mv lib/tasks/jasmine.rake lib/tasks/jasmine.no-rake
+
+# bundle exec jasmine init
+[ -e lib/tasks/jasmine.rake ] && \
+    mv lib/tasks/jasmine.rake lib/tasks/jasmine.no-rake &&
+        touch lib/tasks/jasmine.rake
 
 echo "Setting up DB..."
 if  bundle exec rake db:first_user  $ARG_PW; then
