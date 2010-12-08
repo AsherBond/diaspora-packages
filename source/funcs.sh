@@ -183,7 +183,7 @@ function redis_config
                 Don't know how to configure redis for this platform. Copy
                 the configuration file redis.conf to the config directory
                 and patch it manually. In particular, don't daemonize.
-        EOM
+	EOM
         return
     fi
 
