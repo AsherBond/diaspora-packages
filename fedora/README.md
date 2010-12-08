@@ -133,3 +133,5 @@ in the original README.md:
   for Fedora i. e., they could be removed from the bundle and added as
   dependencies instead.  This is likely to make things more stable in the
   long run.  diaspora.spec has a list.
+
+
