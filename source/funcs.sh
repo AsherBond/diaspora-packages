@@ -95,35 +95,36 @@ function get_hostname
         fi
     done
     rm -f ip
-    echo -n ${new_hostname:-$hostname}
+    result=${new_hostname:-$hostname}
+    echo -n ${result%.}
 }
 
 
 function init_appconfig
-# Edit pod_url in hostname
-# Silently uses hostname argument if present, else runs dialog.
-# Usage: init_appconfig <app_config.yml> [hostname]
+# Edit pod_url in app_config.yml
+# Silently uses url argument if present, else runs dialog.
+# Usage: init_appconfig <app_config.yml> [url]
 {
     config=$1
-    local arg_hostname="$2"
-    local curr_hostname=$( awk '/pod_url:/ { print $2; exit }' <$config )
+    local arg_url="$2"
+    local curr_url=$( awk '/pod_url:/ { print $2; exit }' <$config )
 
-    if [ -n "$arg_hostname" ]; then
-        sed -i "/pod_url:/s|:.*|: $arg_hostname|g" $config && \
-            echo "config/app_config.yml updated, pod_url is $arg_hostname."
+    if [ -n "$arg_url" ]; then
+        sed -i "/pod_url:/s|:.*|: $arg_url|g" $config && \
+            echo "$config is updated, pod_url is $arg_url."
         return 0
     else
-        ext_hostname=$( get_hostname)
+        ext_url="http://$( get_hostname)"
         while : ; do
-            echo "Current hostname is \"$curr_hostname\""
-            echo -n "Enter new hostname [$ext_hostname] :"
-            read new_hostname garbage
-            [ -z "$new_hostname" ] && new_hostname="$ext_hostname"
-            echo -n "Use \"$new_hostname\" as pod_url (Yes/No) [Yes]? :"
+            echo "Current url is \"$curr_url\""
+            echo -n "Enter new url [$ext_url] :"
+            read new_url garbage
+            [ -z "$new_url" ] && new_url="$ext_url"
+            echo -n "Use \"$new_url\" as pod_url (Yes/No) [Yes]? :"
             read yesno garbage
             [ "${yesno:0:1}" = 'y' -o "${yesno:0:1}" = 'Y' -o -z "$yesno" ] && {
-                sed -i "/pod_url:/s|:.*|: $new_hostname|g" $config &&
-                    echo "config/app_config.yml updated."
+                sed -i "/pod_url:/s|:.*|: \"$new_url\"|g" $config &&
+                    echo "$config updated."
                 break
             }
         done
