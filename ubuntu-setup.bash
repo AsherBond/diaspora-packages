@@ -203,10 +203,13 @@ fi
 echo "Setting up DB..."
 rake db:first_user $arg_pw || {
     cat <<- EOF
-	Database config failed. You might want to remove all db files with
-	'rm -rf /var/lib/mongodb/*' and/or reset the config file by
-	'cp config/app_config.yml.example config/app_config.yml' before
-	making a new try. Also, make sure the mongodb server is running
+	Database config failed. You might want to:
+	 - Check that mongod is running: service mongodb status
+	 - Repair database files: mongod --repair
+	 - Remove all db files: rm -rf /var/lib/mongodb/*
+	 - Reset the config file by
+	     'cp config/app_config.yml.example config/app_config.yml'
+	before making a new try.
 	EOF
 }
 

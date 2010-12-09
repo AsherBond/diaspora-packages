@@ -49,15 +49,14 @@ mongodb_config /etc/mongodb.conf
 init_db "$2" || {
     cat <<- EOF
 	Database config failed. You might want to
-	  - Just remove the db lock file: rm /var/lib/mongodb/mongod.lock
-	  - Drop the diaspora mongo database:
-	        % mongo diaspora-development
-	        > db.dropDatabase()
-	  - Remove all db files: rm -rf /var/lib/mongodb/*
-	  - Reset the config file by
-	        cp config/app_config.yml.example config/app_config.yml
-	Also, make sure the mongodb server is running e. g., using
-	    service mongod status
+	 - Check that mongod is running: service mongodb status
+	 - Repair database files: mongod --repair
+	 - Drop the diaspora mongo database:
+	       % bundle exec rake db:purge
+	 - Remove all db files: rm -rf /var/lib/mongodb/*
+	 - Reset the config file by
+	     'cp config/app_config.yml.example config/app_config.yml'
+	before making a new try
 	EOF
 }
 

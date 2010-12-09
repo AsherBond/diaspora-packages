@@ -80,10 +80,14 @@ init_appconfig config/app_config.yml "$DIASPORA_HOSTNAME"
 
 init_db $ARG_PW || {
     cat <<- EOM
-	Database config failed. You might want to remove all db files
-	and/or reset the config file by
-	'cp config/app_config.yml.example config/app_config.yml' before
-	making a new try. Also, make sure the mongodb server is running.
+	Database config failed. You might want to
+	 - Check that mongod is running: (service mongod[b] status ?)
+	 - Repair database files: mongod --repair
+	 - Drop the diaspora mongo database:
+	       % bundle exec rake db:purge
+	 - Remove all db files: (rm -rf /var/lib/mongodb/* ?)
+	 - Reset the config file by
+	     'cp config/app_config.yml.example config/app_config.yml'
 	EOM
 }
 

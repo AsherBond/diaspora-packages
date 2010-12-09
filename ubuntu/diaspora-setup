@@ -53,14 +53,13 @@ init_appconfig config/app_config.yml $arg_hostname
 init_db $arg_pw|| {
     cat <<- EOF
 	Database config failed. You might want to
-	 - Just remove the db lock file: rm /var/lib/mongodb/mongod.lock
+	 - Check that mongod is running: service mongodb status
+	 - Repair database files: mongod --repair
 	 - Drop the diaspora mongo database:
 	         % bundle exec rake db:purge
 	 - Remove all db files: rm -rf /var/lib/mongodb/*
 	 - Reset the config file by
-	       cp config/app_config.yml.example config/app_config.yml
-	Also, make sure the mongodb server is running e. g., using
-	'service mongodb status'.
+	     'cp config/app_config.yml.example config/app_config.yml'
 	EOF
 }
 
