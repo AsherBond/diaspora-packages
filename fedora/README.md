@@ -23,12 +23,15 @@ Bootstrap the distribution from git:
     % git clone git://github.com/diaspora/diaspora-packages.git
     % cd diaspora-packages
 
-Create and install the diaspora bundle and application in
-diaspora-packages/source according to
-[source README](http://github.com/diaspora/diaspora-packages/tree/master/source)
+Create and  the diaspora bundle and application tarballs in
+diaspora-packages/source/dist according to [source README]
+(http://github.com/diaspora/diaspora-packages/tree/master/source)
+    % cd source
+    % ./make-dist.sh source
+    % ./make-dist.sh bundle
 
 Setup links from  tarballs to RPM source directory and create spec files:
-    % cd fedora
+    % cd ../fedora
     % ./prepare-rpm.sh
 
 Build rpms:
@@ -53,13 +56,14 @@ Start production server:
 
 See [Using Apache](http://github.com/diaspora/diaspora/wiki/Using-apache) for
 apache/passenger setup. After configuration, start with:
-    /sbin/service diaspora-wsd start
+    initctl start diaspora-redis
+    initctl start diaspora-websocket
+    initctl start diaspora-resque
     /sbin/service httpd restart
-
 
 #### Notes
 
-Services are implemented using upstart with files /etc/init/diaspora-* To control
+Services are implemented using upstart with files /etc/init/diaspora-\* To control
 separate services:
     initctl <status|start|stop> diaspora-thin
     initctl <status|start|stop> diaspora-websocket
@@ -80,7 +84,7 @@ of this stuff (exact filenames varies):
     rpmbuild -ba --with dev dist/diaspora-bundle.spec
     rpm -U ~/rmpbuild/rpms/i686/diaspora-bundle-dev-0.0-1.1010042345_4343fade43.fc13.i686
 
-The spec-files in dist/ are patched by *./prepare-rpm.sh to reference
+The spec-files in dist/ are patched by *./prepare-rpm.sh* to reference
 correct versions of diaspora and diaspora-bundle.  Editing spec files should be
 done in this directory, changes in dist/ are lost when doing *./prepare-rpm.sh *.
 
@@ -100,12 +104,9 @@ bundle, containing some C extensions, is architecture-dependent and lives
 in /usr/lib[64]/diaspora. Log files are in /var/log/diaspora. Symlinks in
 /usr/share diaspora makes log, bundle  and tmp dir available as expected by
 diaspora app.  This is more or less as mandated by LSB and Fedora packaging rules.
+To find out the actual situatiuon:
 
     find . -type l -exec ls -l {} \; | awk '{print $9, $10, $11}'
-    ./public/uploads -> /var/lib/diaspora/uploads
-    ./log -> /var/log/diaspora
-    ./tmp -> /var/lib/diaspora/tmp
-    ./vendor/bundle -> /usr/lib/diaspora-bundle/master/vendor/bundle
 
 
 #### Discussion
@@ -115,14 +116,13 @@ The 1.8.7 rebuild in Fedora 13 is a pain.
 For better or worse, this installation differs from the procedure outlined
 in the original README.md:
 
-- All configuration is done in /usr/share/diaspore. No global or user
+- All configuration is done in /usr/share/diaspora. No global or user
   installed bundles are involved. Easier to maintain, but a mess if there
   should be parallel installations.
 
-- Service is run under it's own uid, not root or an ordinary user account.
-
-- Using the pre-packaged mongod server means that the DB has reasonable
-  permissions, not 777.
+- A more secure setup: Service runs under it's own uid, write-protected
+  installation, reasonable permissions on the mongo data files (as
+  opposed to 777).
 
 - Splitting in two packages makes sense IMHO. The bundle is not changed
   that often, but is quite big: ~35M without test packages (the default) or
@@ -132,6 +132,6 @@ in the original README.md:
 - Many, roughly 50% of the packages in the bundle are already packaged
   for Fedora i. e., they could be removed from the bundle and added as
   dependencies instead.  This is likely to make things more stable in the
-  long run.  diaspora.spec has a list.
+  long run.  fedora/diaspora.spec has a list.
 
 

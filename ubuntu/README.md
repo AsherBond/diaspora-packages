@@ -50,22 +50,12 @@ The diaspora services are controlled by upstart. To start/stop:
 To start/stop all services:
     % sudo service diaspora <start|stop|status>
 
-./make-dist.sh bundle|source occasionally fails on bad Gemfile.lock. The
-root cause is a bad Gemfile.lock in the git repo. Possible fixes includes
-using a older version known to work:
-    % ./make-dist.sh -c c818885b6 bundle
-    % ./make-dist.sh -c c818885b6 source
-
-or forcing a complete update of Gemfile.lock using 'bundle update' (a
-potentially problematic operation):
-    % ./make-dist.sh -f bundle
-
 The application lives in /usr/share/diaspora/master. All writable areas
 (log, uploads, tmp) are links to /var/lib/diaspora. The config file lives
 in /etc/diaspora. All files in /usr/share are read-only, owned by root.
 
-The bundle lives in /usr/lib/diaspora-bundle, readonly, owned by root.
-Application finds it through the patched .bundle/config in root dir.
+The bundle lives in /usr/lib[64]/diaspora-bundle, readonly, owned by root.
+Application finds it through the symlinked *vendor* directory.
 
 Once diaspora is installed, makedist.sh et. al. are available in
 /usr/share/diaspora/master/pkg/ubuntu, so there's no need to checkout
