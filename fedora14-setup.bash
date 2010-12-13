@@ -118,7 +118,7 @@ else
 fi
 
 echo 'To start server: sudo su - diaspora -c "diaspora/script/server -d"'
-echo " To stop server: pkill thin; kill \$(cat $pidfile)"
+echo " To stop server: pkill thin; kill \\\$(cat $pidfile)"
 
 EOF
 

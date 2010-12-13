@@ -13,18 +13,29 @@ Bootstrap the distribution from git:
 
 Create and install the diaspora bundle and application in
 diaspora/pkg/source according to
-[source README](http://github.com/diaspora/diaspora-packages/tree/master/source/)
+[source README]
+(http://github.com/diaspora/diaspora-packages/tree/master/source/):
+    % cd pkg/source
+    % ./make-dist.sh bundle
+    % ./make-dist.sh source
 
 Install the dependencies (a good time for a coffe break):
     % cd pkg/ubuntu
     % sudo ./diaspora-install-deps
 
-Install, initiate and start the server;
-    % sudo ./diaspora-install
+Install and  initiate the tarballs created bt make-dist.sh:
+    % sudo ./diaspora-install-bundle \
+        dist/diaspora-bundle-rt-0.0-xxxx_yyyy.tar.gz
+    % sudo ./diaspora-install dist/diaspora-0.0-xxxx_yyyy.tar.gz
     % sudo ./diaspora-setup
     % sudo su - diaspora
     % cd /usr/share/diaspora/master
+
+Start the development server
     % ./script/server
+
+Start servers
+    % sudo service diaspora start
 
 ### Upgrading
 
@@ -41,14 +52,12 @@ In most cases only source will need to be built, which is fast.
 
 ### Notes
 
-The diaspora services are controlled by upstart. To start/stop:
+The diaspora services are controlled by upstart. To start/stop
+individual services:
     % sudo initctl <start|stop|status>  diaspora-thin
     % sudo initctl <start|stop|status>  diaspora-redis
     % sudo initctl <start|stop|status>  diaspora-websocket
     % sudo initctl <start|stop|status>  diaspora-resque
-
-To start/stop all services:
-    % sudo service diaspora <start|stop|status>
 
 The application lives in /usr/share/diaspora/master. All writable areas
 (log, uploads, tmp) are links to /var/lib/diaspora. The config file lives

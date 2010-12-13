@@ -155,7 +155,7 @@ function init_db
 {
     [ -n "$1" ] && pw_arg="password=$1"
     if bundle exec rake db:first_user $pw_arg; then
-        echo "Database config OK, first user setup."
+        echo "Database config OK."
         return
     else
         return  1

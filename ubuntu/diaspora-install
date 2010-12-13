@@ -2,12 +2,17 @@
 #
 # Install a fedora source package
 #
-# Usage diaspora-install <tar package>
+#
+Usage='diaspora-install <tar package>'
 
 test "$(perl -e 'print $>')" = "0" || {
     echo "You need to be root to do this, giving up"
     exit 2
 }
+
+test  $# -eq 1 || { echo "$Usage"; exit 2; }
+
+test -r "$1" || { echo "Cannot open $1"; exit 2;  }
 
 getent group diaspora >/dev/null || groupadd -r diaspora
 getent passwd diaspora >/dev/null ||    \
