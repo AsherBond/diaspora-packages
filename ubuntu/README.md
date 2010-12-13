@@ -7,9 +7,8 @@ work as a first step towards packaging, but should be usable as is.
 
 Bootstrap the distribution from git:
     % sudo apt-get install git-core
-    % git clone git://github.com/diaspora/diaspora.git
-    % cd diaspora
-    % git submodule update --init pkg
+    % git git clone http://github.com/diaspora/diaspora-packages.git
+    % cd diaspora-packages
 
 Create and install the diaspora bundle and application in
 diaspora/pkg/source according to
@@ -27,7 +26,7 @@ Install and  initiate the tarballs created by make-dist.sh:
     % sudo ./diaspora-install-bundle \
         dist/diaspora-bundle-rt-0.0-xxxx_yyyy.tar.gz
     % sudo ./diaspora-install dist/diaspora-0.0-xxxx_yyyy.tar.gz
-    % sudo ./diaspora-setup
+    % sudo /usr/share/diaspora/diaspora-setup
 
 Start the development server
     % sudo su - diaspora

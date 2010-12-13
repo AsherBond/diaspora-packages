@@ -11,7 +11,6 @@ grep -v '^#' /etc/apt/sources.list | grep -q universe || {
 	EOF
     sleep 2
 }
-release=$( lsb_release -a | awk '/Release:/ {print $2}')
 
 sudo apt-get update
 sudo apt-get install --no-install-recommends -qy \
@@ -32,13 +31,14 @@ sudo apt-get install --no-install-recommends -qy \
 # bug in 10.10 prevents ruby-dev to be installed with the others (!)
 sudo apt-get install --no-install-recommends -qy ruby-dev
 
-
+release=$( lsb_release -a | awk '/Release:/ {print $2}')
 if [ "$release" = "10.04" ]; then
     # See: https://bugs.launchpad.net/ubuntu/+source/mongodb/+bug/557024
     sudo apt-get install xulrunner-1.9
     xulversion=$( xulrunner --gre-version)
     sudo ln -sf "/usr/lib/xulrunner-$xulversion/libmozjs.so" /usr/lib
 fi
+
 sudo add-apt-repository ppa:maco.m/ruby
 sudo apt-get update
 sudo apt-get install -qy rubygems
