@@ -28,10 +28,10 @@ Install and  initiate the tarballs created by make-dist.sh:
         dist/diaspora-bundle-rt-0.0-xxxx_yyyy.tar.gz
     % sudo ./diaspora-install dist/diaspora-0.0-xxxx_yyyy.tar.gz
     % sudo ./diaspora-setup
-    % sudo su - diaspora
-    % cd /usr/share/diaspora/master
 
 Start the development server
+    % sudo su - diaspora
+    % cd /usr/share/diaspora/master
     % ./script/server
 
 Start servers
