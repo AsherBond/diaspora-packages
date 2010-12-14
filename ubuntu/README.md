@@ -11,10 +11,8 @@ Bootstrap the distribution from git:
     % cd diaspora-packages
 
 Create and install the diaspora bundle and application in
-diaspora/pkg/source according to
-[source README]
-(http://github.com/diaspora/diaspora-packages/tree/master/source/):
-    % cd pkg/source
+diaspora/pkg/source according to [source README](http://github.com/diaspora/diaspora-packages/tree/master/source/):
+    % cd source
     % ./make-dist.sh bundle
     % ./make-dist.sh source
 
