@@ -1,0 +1,15 @@
+#!/usr/bin/ruby
+#
+require 'etc'
+
+begin
+  Process.uid = Etc.getpwnam('diaspora').uid
+rescue ArgumentError => e
+   puts 'No user diaspora found (or not root).'
+   exit( 2 )
+end
+
+Dir.chdir( '/usr/share/diaspora/master')
+
+exec( ARGV.join(" ") )
+
