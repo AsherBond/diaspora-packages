@@ -40,6 +40,9 @@ ln -s $libdir/diaspora-bundle/vendor .
 ln -sf $libdir/diaspora-bundle/Gemfile .
 ln -sf $libdir/diaspora-bundle/Gemfile.lock .
 
+mkdir -p /var/run/diaspora
+chown diaspora /var/run/diaspora
+
 test -e config/app_config.yml ||
     cp config/app_config.yml.example config/app_config.yml
 
@@ -66,6 +69,7 @@ init_db $arg_pw|| {
 init_public
 
 chown -R diaspora /var/log/diaspora
+
 
 sed -i '/socket_pidfile:/s|:.*|: /var/run/diaspora/diaspora-wsd.pid|' \
     config/app_config.yml
