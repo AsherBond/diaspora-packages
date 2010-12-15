@@ -7,7 +7,7 @@
 export PATH=$PATH:/usr/local/bin
 
 arg_hostname="$1"
-arg_pw=${2:-'nosecret'}
+arg_pw="$2"
 
 path=$( readlink -fn $0) && cd $(dirname $path)/../.. || \
     cd /usr/share/diaspora/master
