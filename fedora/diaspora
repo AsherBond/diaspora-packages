@@ -67,7 +67,7 @@ start() {
 stop() {
 	[ $UID -eq 0 ] || exit 4
 	echo -n $"Stopping diaspora services: "
-        for service in thin redis  resque websocket; do
+        for service in thin resque websocket redis; do
             echo -n  "$service "
             initctl stop diaspora-$service > /dev/null
        	    RETVAL=$?
