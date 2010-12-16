@@ -22,6 +22,7 @@ Source5:        diaspora-thin.conf
 Source6:        diaspora-websocket.conf
 Source7:        diaspora-redis.conf
 Source8:        diaspora-resque.conf
+Source9:        diaspora-daemon
 BuildArch:      noarch
 BuildRoot:      %{_rmpdir}/not-used-in-fedora/
 
@@ -66,6 +67,8 @@ mkdir -p  $RPM_BUILD_ROOT/%{_sysconfdir}/diaspora
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/diaspora
 cp -ar master $RPM_BUILD_ROOT/%{_datadir}/diaspora
 cp -ar  master/.bundle $RPM_BUILD_ROOT/%{_datadir}/diaspora/master
+
+cp %SOURCE9  $RPM_BUILD_ROOT/%{_datadir}/diaspora/master/script
 rm -rf $RPM_BUILD_ROOT/%{_datadir}/diaspora/master/vendor/*
 mkdir -p $RPM_BUILD_ROOT/%{_localstatedir}/lib/diaspora/uploads
 mkdir -p $RPM_BUILD_ROOT/%{_localstatedir}/lib/diaspora/tmp

@@ -165,7 +165,7 @@ function init_db
 function mongodb_config
 #Ensure that mongodb only serves localhost (security).
 {
-    grep 'bind_ip' $1 || {
+    grep -q 'bind_ip' $1 || {
         echo "Reconfiguring mongod to only serve localhost (127.0.0.1)"
         echo >> $1
         echo "bind_ip = 127.0.0.1   # Added by diaspora-setup" >> $1

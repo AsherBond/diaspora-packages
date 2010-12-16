@@ -42,6 +42,9 @@ test -e config/app_config.yml ||
 
 redis_config
 
+chkconfig redis off
+service redis stop || :
+
 init_appconfig config/app_config.yml $arg_hostname
 
 mongodb_config /etc/mongodb.conf

@@ -1,0 +1,19 @@
+#!/usr/bin/ruby
+#
+require 'etc'
+
+begin
+  pwent =  Etc.getpwnam('diaspora')
+  Process.gid  = pwent.gid
+  Process.egid = pwent.gid
+  Process.uid  = pwent.uid
+  Process.euid = pwent.uid
+rescue  => e
+  logger "Can't set diaspora uid/gid: " + e.inspect
+  exit( 2 )
+end
+
+Dir.chdir( '/usr/share/diaspora/master')
+
+exec( ARGV.join(" ") )
+

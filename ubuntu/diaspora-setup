@@ -52,6 +52,8 @@ test -e config/app_config.yml ||
 [ -e  lib/tasks/jasmine.rake ] &&
     sudo mv lib/tasks/jasmine.rake lib/tasks/jasmine.no-rake
 
+cp pkg/ubuntu/diaspora-daemon script
+
 redis_config
 
 init_appconfig config/app_config.yml $arg_hostname
