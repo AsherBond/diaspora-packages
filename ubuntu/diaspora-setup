@@ -30,8 +30,8 @@ service mongodb stop || :
 rm -f /var/lib/mongodb/mongod.lock
 service mongodb start || :
 
+service redis-server stop
 update-rc.d redis-server remove
-/etc/init.d/redis-server stop
 
 cd /usr/share/diaspora/master
 
