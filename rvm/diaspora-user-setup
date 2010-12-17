@@ -71,7 +71,8 @@ git submodule update --init pkg
 bundle install --path vendor/bundle
 #bundle exec jasmine init
 [ -f lib/tasks/jasmine.rake ] &&
-    sudo mv lib/tasks/jasmine.rake lib/tasks/jasmine.no-rake
+    sudo mv lib/tasks/jasmine.rake lib/tasks/jasmine.no-rake &&
+        touch lib/tasks/jasmine.rake
 
 #Configure diaspora
 cp config/app_config.yml.example config/app_config.yml

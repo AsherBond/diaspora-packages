@@ -31,7 +31,7 @@ rm -f /var/lib/mongodb/mongod.lock
 service mongodb start || :
 
 service redis-server stop
-update-rc.d redis-server remove
+update-rc.d -f redis-server remove
 
 cd /usr/share/diaspora/master
 
