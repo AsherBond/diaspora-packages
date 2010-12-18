@@ -2,9 +2,7 @@
 
 Provides classic, binary RPM packages for deployment on Fedora.
 
-#### Synopsis
-
-Prerequisites:
+#### Prerequisites:
 
 - For Fedora 13 ruby-1.8, rubygem, git  and rake as described in
   [RPM installation Fedora](http://github.com/diaspora/diaspora/wiki/Rpm-installation-on-fedora)
@@ -15,6 +13,8 @@ Prerequisites:
 
 - A personal environment to build RPM:s, also described in
   [RPM installation Fedora](http://github.com/diaspora/diaspora/wiki/Rpm-installation-on-fedora)
+
+#### Building rpm:s
 
 Install g++ and gcc:
     % yum install gcc-c++
@@ -37,6 +37,8 @@ Setup links from  tarballs to RPM source directory and create spec files:
 Build rpms:
     rpmbuild -ba dist/diaspora.spec
     rpmbuild -ba dist/diaspora-bundle.spec
+
+#### Installing and running rpm:s
 
 Install (as root, the exact name of your rpm will differ):
     rpm -U ~/rmpbuild/rpms/i686/diaspora-bundle-rt-0.0-1.1010042345_4343fade43.fc13.i686
