@@ -141,7 +141,7 @@ rm -fr $RPM_BUILD_ROOT
 %dir %{_sysconfdir}/diaspora
 %config(noreplace) %{_sysconfdir}/diaspora/environment.rb
 %config(noreplace) %{_sysconfdir}/diaspora/server.sh
-%config(noreplace) %{_sysconfdir}/diaspora/app_config.yml
+%config(noreplace) %{_sysconfdir}/diaspora/app_config.yml.example
 %{_datadir}/diaspora/master/tmp
 %{_datadir}/diaspora/master/public/uploads
 %{_datadir}/diaspora/master/log
