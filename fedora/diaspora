@@ -30,7 +30,7 @@ if [ -f /etc/sysconfig/diaspora -a $UID -eq 0 ]; then
 fi
 
 # Note: this line is patched by installation scripts.
-cd  /usr/share/diaspora
+cd /usr/share/diaspora/master
 
 RETVAL=0
 
@@ -41,9 +41,9 @@ start() {
 	[ $UID -eq 0 ] || exit 4
 	[ -f $exec ]   || exit 5
 
-        echo -n $"Starting Diaspora services: "
+        echo -n $"Starting Diaspora services:"
         for service in  redis resque thin websocket; do
-            echo -n " $service "
+            echo -n " $service"
 	    initctl start diaspora-$service \
                 >> /var/log/diaspora-$service.log 2>&1 &
             RETVAL=$((RETVAL | $? ))
@@ -59,23 +59,21 @@ start() {
             fi
             touch  /var/lock/subsys/diaspora-$service
         done
-        echo
         echo_success
         echo
 }
 
 stop() {
 	[ $UID -eq 0 ] || exit 4
-	echo -n $"Stopping diaspora services: "
+	echo -n $"Stopping diaspora services:"
         for service in thin resque websocket redis; do
-            echo -n  "$service "
+            echo -n  " $service"
             initctl stop diaspora-$service > /dev/null
        	    RETVAL=$?
 	    [ $RETVAL -eq 0 ] && rm -f "${service}_lockfile"
             rm -f /var/lock/subsys/diaspora-$service
-            sleep 1
+#            sleep 1
         done
-        echo
         if [ $RETVAL -eq 0 ]; then
 	    echo_success
         else

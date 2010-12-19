@@ -75,18 +75,17 @@ mkdir -p $RPM_BUILD_ROOT/%{_localstatedir}/lib/diaspora/tmp
 
 mkdir -p    $RPM_BUILD_ROOT/%{_datadir}/diaspora/master/pkg/fedora
 cp %SOURCE2 $RPM_BUILD_ROOT/%{_datadir}/diaspora/master/pkg/fedora
-%{SOURCE4}  $RPM_BUILD_ROOT/%{_datadir}/diaspora/master/pkg/fedora/diaspora-setup \
-            $RPM_BUILD_ROOT/%{_datadir}/diaspora/diaspora-setup
+%{SOURCE4}  \
+    $RPM_BUILD_ROOT/%{_datadir}/diaspora/master/pkg/fedora/diaspora-setup \
+    $RPM_BUILD_ROOT/%{_datadir}/diaspora/diaspora-setup
 
-cp master/config/app_config.yml.example  \
-    $RPM_BUILD_ROOT/%{_sysconfdir}/diaspora/app_config.yml
-cp master/config/server.sh  $RPM_BUILD_ROOT/%{_sysconfdir}/diaspora
-%{SOURCE4}  \
-    $RPM_BUILD_ROOT%{_datadir}/diaspora/master/config/server.sh \
-    $RPM_BUILD_ROOT%{_sysconfdir}/diaspora/server.sh
-%{SOURCE4}  \
-    $RPM_BUILD_ROOT%{_datadir}/diaspora/master/config/app_config.yml \
-    $RPM_BUILD_ROOT%{_sysconfdir}/diaspora/app_config.yml
+for file in server.sh environment.rb app_config.yml.example;  do
+    mv $RPM_BUILD_ROOT%{_datadir}/diaspora/master/config/$file \
+        $RPM_BUILD_ROOT/%{_sysconfdir}/diaspora/$file
+    %{SOURCE4} \
+        $RPM_BUILD_ROOT/%{_sysconfdir}/diaspora/$file \
+        $RPM_BUILD_ROOT%{_datadir}/diaspora/master/config/$file
+done
 
 mkdir -p $RPM_BUILD_ROOT/%{_localstatedir}/log/diaspora
 mkdir -p $RPM_BUILD_ROOT/%{_localstatedir}/run/diaspora
@@ -140,6 +139,7 @@ rm -fr $RPM_BUILD_ROOT
 %attr(-, diaspora, diaspora) %{_localstatedir}/run/diaspora
 
 %dir %{_sysconfdir}/diaspora
+%config(noreplace) %{_sysconfdir}/diaspora/environment.rb
 %config(noreplace) %{_sysconfdir}/diaspora/server.sh
 %config(noreplace) %{_sysconfdir}/diaspora/app_config.yml
 %{_datadir}/diaspora/master/tmp

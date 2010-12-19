@@ -4,6 +4,7 @@
 #
 #  Usage: # ./diaspora-setup [external hostname] [password]
 #
+set -x
 export PATH=$PATH:/usr/local/bin
 
 arg_hostname="$1"
@@ -21,36 +22,31 @@ test $UID = "0" || {
 services=$( netstat -nl | grep '[^:]:3000[ \t]')
 test -n "$services" && {
     echo "Warning: something is already using port 3000"
-    echo "     $services"
 }
 
-/sbin/service mongod start || :
+mongodb_config /etc/mongodb.conf
+/sbin/service mongod condrestart || :
+
+[[ ! -e config/redis.conf || /etc/redis.conf -nt config/redis.conf ]] &&
+    redis_config
+service redis stop || :
+chkconfig redis off
 
 libdir=$(rpm --eval %_libdir)
-
 rm -rf vendor
 ln -s $libdir/diaspora-bundle/vendor .
 ln -sf $libdir/diaspora-bundle/Gemfile .
 ln -sf $libdir/diaspora-bundle/Gemfile.lock .
 ln -sf $libdir/diaspora-bundle/config .bundle/config
 
-test -e config/app_config.yml ||
-    cp config/app_config.yml.example config/app_config.yml
-
 [ -e  lib/tasks/jasmine.rake ] &&
     sudo mv lib/tasks/jasmine.rake lib/tasks/jasmine.no-rake
 
-redis_config
-
-service redis-server stop || :
-chkconfig redis-server off
-
-init_appconfig config/app_config.yml $arg_hostname
-
-mongodb_config /etc/mongodb.conf
-
-init_db "$2" || {
-    cat <<- EOF
+[ -e config/app_config.yml ] || {
+    cp config/app_config.yml.example config/app_config.yml
+    init_appconfig config/app_config.yml $arg_hostname
+    init_db "$2" || {
+        cat <<- EOF
 	Database config failed. You might want to
 	 - Check that mongod is running: service mongodb status
 	 - Repair database files: mongod --repair
@@ -61,8 +57,8 @@ init_db "$2" || {
 	     'cp config/app_config.yml.example config/app_config.yml'
 	before making a new try
 	EOF
+    }
 }
 
 init_public
-
 chown -R diaspora /var/log/diaspora

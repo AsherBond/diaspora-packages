@@ -19,7 +19,6 @@ test  "$( perl -e 'print $<')" = "0" || {
 
 . pkg/source/funcs.sh
 
-
 services=$( netstat -nl | grep '[^:]:3000[ \t]')
 test -n "$services" && {
     echo "Warning: something is already using port 3000"
@@ -30,14 +29,10 @@ service mongodb stop || :
 rm -f /var/lib/mongodb/mongod.lock
 service mongodb start || :
 
-service redis-server stop
-update-rc.d -f redis-server remove
-
 cd /usr/share/diaspora/master
 
 libdir="/usr/lib"
 [[ $(arch) == "x86_64" ]] && libdir="/usr/lib64"
-
 rm -rf vendor
 ln -s $libdir/diaspora-bundle/vendor .
 ln -sf $libdir/diaspora-bundle/Gemfile .
@@ -46,20 +41,21 @@ ln -sf $libdir/diaspora-bundle/Gemfile.lock .
 mkdir -p /var/run/diaspora
 chown diaspora /var/run/diaspora
 
-test -e config/app_config.yml ||
-    cp config/app_config.yml.example config/app_config.yml
-
 [ -e  lib/tasks/jasmine.rake ] &&
     sudo mv lib/tasks/jasmine.rake lib/tasks/jasmine.no-rake
 
 cp pkg/ubuntu/diaspora-daemon script
 
-redis_config
+[[ ! -e config/redis.conf || /etc/redis.conf -nt config/redis.conf ]] &&
+    redis_config
+service redis-server stop
+update-rc.d -f redis-server remove
 
-init_appconfig config/app_config.yml $arg_hostname
-
-init_db $arg_pw|| {
-    cat <<- EOF
+[ -e config/app_config.yml ] || {
+    cp config/app_config.yml.example config/app_config.yml
+    init_appconfig config/app_config.yml $arg_hostname
+    init_db $arg_pw|| {
+        cat <<- EOF
 	Database config failed. You might want to
 	 - Check that mongod is running: service mongodb status
 	 - Repair database files: mongod --repair
@@ -69,13 +65,8 @@ init_db $arg_pw|| {
 	 - Reset the config file by
 	     'cp config/app_config.yml.example config/app_config.yml'
 	EOF
+    }
 }
 
 init_public
-
 chown -R diaspora /var/log/diaspora
-
-
-sed -i '/socket_pidfile:/s|:.*|: /var/run/diaspora/diaspora-wsd.pid|' \
-    config/app_config.yml
-
