@@ -21,7 +21,7 @@ Install the dependencies (a good time for a coffe break):
     % sudo ./diaspora-install-deps
 
 Install and  initiate the tarballs created by make-dist.sh:
-    % sudo ./diaspora-bundle_install \
+    % sudo ./diaspora-bundle-install \
         dist/diaspora-bundle-0.0-xxxx_yyyy.tar.gz
     % sudo ./diaspora-install dist/diaspora-0.0-xxxx_yyyy.tar.gz
     % sudo /usr/share/diaspora/diaspora-setup
