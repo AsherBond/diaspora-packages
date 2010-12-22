@@ -7,7 +7,7 @@ work as a first step towards packaging, but should be usable as is.
 
 Bootstrap the distribution from git:
     % sudo apt-get install git-core
-    % git git clone http://github.com/diaspora/diaspora-packages.git
+    % git clone http://github.com/diaspora/diaspora-packages.git
     % cd diaspora-packages
 
 Create and install the diaspora bundle and application in
