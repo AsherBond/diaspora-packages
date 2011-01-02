@@ -25,7 +25,7 @@ test -n "$services" && {
 }
 
 mongodb_config /etc/mongodb.conf
-/sbin/service mongod condrestart || :
+/sbin/service mongod start || :
 
 [[ ! -e config/redis.conf || /etc/redis.conf -nt config/redis.conf ]] &&
     redis_config
