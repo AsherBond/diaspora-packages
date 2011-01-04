@@ -53,7 +53,7 @@ ruby=$(which ruby) || ruby=""
 if [[ -z "$ruby" || ("${ruby:0:4}" == "/usr") ]]; then
     echo '#### Installing ruby (will take forever) ... ####'
     rvm install ruby-1.8.7-p302
-    rvm --default ruby-1.8.7
+    rvm --default ruby-1.8.7-p302
 
     echo "#### Installing bundler ... ####"
     gem install bundler
